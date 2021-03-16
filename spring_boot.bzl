@@ -73,7 +73,7 @@ spring_boot_binary = rule(
             mandatory = True,
         ),
         "loader": attr.label(
-            default = "@maven//:org_springframework_boot_spring_boot_loader",
+            default = Label("@maven//:org_springframework_boot_spring_boot_loader"),
         ),
         "loader_class": attr.string(
             default = "org.springframework.boot.loader.JarLauncher",
