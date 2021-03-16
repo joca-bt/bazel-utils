@@ -54,7 +54,7 @@ def _spring_boot_binary_impl(ctx):
         "unzip -q -d {} {}".format(tmp_dir, loader.path),
         "rm -f {}/META-INF/*".format(tmp_dir),
         "echo '{}' > {}/META-INF/MANIFEST.MF".format(manifest, tmp_dir),
-        "{}/bin/jar -c -f {} -m {}/META-INF/MANIFEST.MF -C {} .".format(java_home, jar.path, tmp_dir, tmp_dir),
+        "{0}/bin/jar -c -f {1} -m {2}/META-INF/MANIFEST.MF -C {2} .".format(java_home, jar.path, tmp_dir),
         "cp {} {}".format(" ".join(_paths(deps)), lib_dir),
         "{}/bin/jar -u -0 -f {} -C {} BOOT-INF/lib/".format(java_home, jar.path, tmp_dir),
     ]
