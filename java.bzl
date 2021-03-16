@@ -70,7 +70,9 @@ javadoc = rule(
             allow_empty = False,
             mandatory = True,
         ),
-        "links": attr.string_list(),
+        "links": attr.string_list(
+            default = ["https://docs.oracle.com/en/java/javase/11/docs/api/"],
+        ),
         "packages": attr.string_list(
             allow_empty = False,
             mandatory = True,
