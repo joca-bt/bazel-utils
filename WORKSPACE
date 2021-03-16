@@ -22,8 +22,8 @@ IO_BAZEL_STARDOC_SHA = "36b8d6c2260068b9ff82faea2f7add164bf3436eac9ba3ec14809f33
 http_archive(
     name = "io_bazel_stardoc",
     sha256 = IO_BAZEL_STARDOC_SHA,
-    strip_prefix = "stardoc-%s" % IO_BAZEL_STARDOC_TAG,
-    url = "https://github.com/bazelbuild/stardoc/archive/%s.zip" % IO_BAZEL_STARDOC_TAG,
+    strip_prefix = "stardoc-{}".format(IO_BAZEL_STARDOC_TAG),
+    url = "https://github.com/bazelbuild/stardoc/archive/{}.zip".format(IO_BAZEL_STARDOC_TAG),
 )
 
 load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
