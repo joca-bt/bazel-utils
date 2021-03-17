@@ -29,6 +29,15 @@ def _dependencies(ctx):
 
     return depset(deps)
 
+def _manifest(ctx):
+    return """\
+Main-Class: {}
+Start-Class: {}\
+""".format(
+        ctx.attr._loader_class,
+        ctx.attr.main_class
+    )
+
 def _paths(depset):
     return [element.path for element in depset.to_list()]
 
@@ -44,8 +53,6 @@ def _spring_boot_binary_impl(ctx):
     classes_dir = "{}/classes/".format(boot_inf_dir)
     lib_dir = "{}/lib/".format(boot_inf_dir)
 
-    manifest = "Main-Class: {}\nStart-Class: {}".format(ctx.attr._loader_class, ctx.attr.main_class)
-
     cmds = [
         "rm -rf {}".format(tmp_dir),
         "mkdir {} {} {}".format(tmp_dir, boot_inf_dir, lib_dir),
@@ -53,7 +60,7 @@ def _spring_boot_binary_impl(ctx):
         "rm -rf {}/META-INF/".format(classes_dir),
         "unzip -q -d {} {}".format(tmp_dir, loader.path),
         "rm -f {}/META-INF/*".format(tmp_dir),
-        "echo '{}' > {}/META-INF/MANIFEST.MF".format(manifest, tmp_dir),
+        "echo '{}' > {}/META-INF/MANIFEST.MF".format(_manifest(ctx), tmp_dir),
         "{0}/bin/jar -c -f {1} -m {2}/META-INF/MANIFEST.MF -C {2} .".format(java_home, jar.path, tmp_dir),
         "cp {} {}".format(" ".join(_paths(deps)), lib_dir),
         "{}/bin/jar -u -0 -f {} -C {} BOOT-INF/lib/".format(java_home, jar.path, tmp_dir),
