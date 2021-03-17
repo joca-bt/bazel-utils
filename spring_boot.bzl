@@ -20,7 +20,7 @@ Collection of Spring Boot rules:
 def _dependencies(ctx):
     deps = []
 
-    for lib in ctx.attr.libs + ctx.attr.runtime_deps:
+    for lib in ctx.attr.libs + ctx.attr.runtime_deps + [ctx.attr._jarmode_layertools]:
         deps.extend(lib[JavaInfo].transitive_runtime_deps.to_list())
 
     for lib in ctx.attr.libs:
@@ -28,6 +28,18 @@ def _dependencies(ctx):
             deps.remove(src)
 
     return depset(deps)
+
+def _layers():
+    return """\
+- "dependencies":
+  - "BOOT-INF/lib/"
+- "spring-boot-loader":
+  - "org/"
+- "application":
+  - "BOOT-INF/classes/"
+  - "BOOT-INF/layers.idx"
+  - "META-INF/"\
+"""
 
 def _manifest(ctx):
     return """\
@@ -58,6 +70,7 @@ def _spring_boot_binary_impl(ctx):
         "mkdir {} {} {}".format(tmp_dir, boot_inf_dir, lib_dir),
         "unzip -q -d {} {}".format(classes_dir, " ".join(_paths(srcs))),
         "rm -rf {}/META-INF/".format(classes_dir),
+        "echo '{}' > {}/layers.idx".format(_layers(), boot_inf_dir),
         "unzip -q -d {} {}".format(tmp_dir, loader.path),
         "rm -f {}/META-INF/*".format(tmp_dir),
         "echo '{}' > {}/META-INF/MANIFEST.MF".format(_manifest(ctx), tmp_dir),
@@ -83,6 +96,9 @@ spring_boot_binary = rule(
             mandatory = True,
         ),
         "runtime_deps": attr.label_list(),
+        "_jarmode_layertools": attr.label(
+            default = Label("@maven//:org_springframework_boot_spring_boot_jarmode_layertools"),
+        ),
         "_jdk": attr.label(
             default = Label("@bazel_tools//tools/jdk:current_host_java_runtime"),
             providers = [java_common.JavaRuntimeInfo],
