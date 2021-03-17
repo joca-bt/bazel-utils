@@ -35,7 +35,7 @@ def _paths(depset):
 def _spring_boot_binary_impl(ctx):
     srcs = depset(transitive = [depset(lib[JavaInfo].runtime_output_jars) for lib in ctx.attr.libs])
     deps = depset(transitive = [_dependencies(ctx)])
-    loader = ctx.attr.loader[JavaInfo].runtime_output_jars[0]
+    loader = ctx.attr._loader[JavaInfo].runtime_output_jars[0]
     jar = ctx.outputs.jar
 
     java_home = ctx.attr._jdk[java_common.JavaRuntimeInfo].java_home
@@ -44,7 +44,7 @@ def _spring_boot_binary_impl(ctx):
     classes_dir = "{}/classes/".format(boot_inf_dir)
     lib_dir = "{}/lib/".format(boot_inf_dir)
 
-    manifest = "Main-Class: {}\nStart-Class: {}".format(ctx.attr.loader_class, ctx.attr.main_class)
+    manifest = "Main-Class: {}\nStart-Class: {}".format(ctx.attr._loader_class, ctx.attr.main_class)
 
     cmds = [
         "rm -rf {}".format(tmp_dir),
@@ -72,12 +72,6 @@ spring_boot_binary = rule(
             allow_empty = False,
             mandatory = True,
         ),
-        "loader": attr.label(
-            default = Label("@maven//:org_springframework_boot_spring_boot_loader"),
-        ),
-        "loader_class": attr.string(
-            default = "org.springframework.boot.loader.JarLauncher",
-        ),
         "main_class": attr.string(
             mandatory = True,
         ),
@@ -85,6 +79,12 @@ spring_boot_binary = rule(
         "_jdk": attr.label(
             default = Label("@bazel_tools//tools/jdk:current_host_java_runtime"),
             providers = [java_common.JavaRuntimeInfo],
+        ),
+        "_loader": attr.label(
+            default = Label("@maven//:org_springframework_boot_spring_boot_loader"),
+        ),
+        "_loader_class": attr.string(
+            default = "org.springframework.boot.loader.JarLauncher",
         ),
     },
     outputs = {
