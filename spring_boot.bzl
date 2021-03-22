@@ -20,7 +20,7 @@ Collection of Spring Boot rules:
 def _dependencies(ctx):
     deps = []
 
-    for lib in ctx.attr.libs + ctx.attr.runtime_deps + [ctx.attr._jarmode_layertools]:
+    for lib in ctx.attr.libs + ctx.attr.runtime_deps + [ctx.attr._spring_boot_jarmode_layertools]:
         deps.extend(lib[JavaInfo].transitive_runtime_deps.to_list())
 
     for lib in ctx.attr.libs:
@@ -46,7 +46,7 @@ def _manifest(ctx):
 Main-Class: {}
 Start-Class: {}\
 """.format(
-        ctx.attr._loader_class,
+        ctx.attr._spring_boot_loader_class,
         ctx.attr.main_class
     )
 
@@ -56,7 +56,7 @@ def _paths(depset):
 def _spring_boot_binary_impl(ctx):
     srcs = depset(transitive = [depset(lib[JavaInfo].runtime_output_jars) for lib in ctx.attr.libs])
     deps = depset(transitive = [_dependencies(ctx)])
-    loader = ctx.attr._loader[JavaInfo].runtime_output_jars[0]
+    loader = ctx.attr._spring_boot_loader[JavaInfo].runtime_output_jars[0]
     jar = ctx.outputs.jar
 
     java_home = ctx.attr._jdk[java_common.JavaRuntimeInfo].java_home
@@ -96,17 +96,17 @@ spring_boot_binary = rule(
             mandatory = True,
         ),
         "runtime_deps": attr.label_list(),
-        "_jarmode_layertools": attr.label(
-            default = Label("@maven//:org_springframework_boot_spring_boot_jarmode_layertools"),
-        ),
         "_jdk": attr.label(
             default = Label("@bazel_tools//tools/jdk:current_host_java_runtime"),
             providers = [java_common.JavaRuntimeInfo],
         ),
-        "_loader": attr.label(
+        "_spring_boot_jarmode_layertools": attr.label(
+            default = Label("@maven//:org_springframework_boot_spring_boot_jarmode_layertools"),
+        ),
+        "_spring_boot_loader": attr.label(
             default = Label("@maven//:org_springframework_boot_spring_boot_loader"),
         ),
-        "_loader_class": attr.string(
+        "_spring_boot_loader_class": attr.string(
             default = "org.springframework.boot.loader.JarLauncher",
         ),
     },
