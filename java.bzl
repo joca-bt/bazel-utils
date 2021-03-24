@@ -71,6 +71,7 @@ javadoc = rule(
         "libs": attr.label_list(
             allow_empty = False,
             mandatory = True,
+            providers = [JavaInfo],
         ),
         "links": attr.string_list(
             default = ["https://docs.oracle.com/en/java/javase/11/docs/api/"],
