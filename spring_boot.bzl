@@ -57,7 +57,7 @@ def _spring_boot_binary_impl(ctx):
     srcs = depset(transitive = [depset(lib[JavaInfo].runtime_output_jars) for lib in ctx.attr.libs])
     deps = depset(transitive = [_dependencies(ctx)])
     loader = ctx.attr._spring_boot_loader[JavaInfo].runtime_output_jars[0]
-    jar = ctx.outputs.jar
+    jar = ctx.actions.declare_file("{}.jar".format(ctx.label.name))
 
     java_home = ctx.attr._jdk[java_common.JavaRuntimeInfo].java_home
     tmp_dir = "{}.tmp/".format(jar.path)
@@ -85,6 +85,8 @@ def _spring_boot_binary_impl(ctx):
         outputs = [jar],
     )
 
+    return DefaultInfo(files = depset([jar]))
+
 spring_boot_binary = rule(
     implementation = _spring_boot_binary_impl,
     attrs = {
@@ -109,8 +111,5 @@ spring_boot_binary = rule(
         "_spring_boot_loader_class": attr.string(
             default = "org.springframework.boot.loader.JarLauncher",
         ),
-    },
-    outputs = {
-        "jar": "%{name}.jar",
     },
 )
