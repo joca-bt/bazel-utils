@@ -23,7 +23,7 @@ def _paths(depset):
 def _javadoc_impl(ctx):
     srcs = depset(transitive = [depset(lib[JavaInfo].source_jars) for lib in ctx.attr.libs])
     deps = depset(transitive = [lib[JavaInfo].transitive_deps for lib in ctx.attr.libs])
-    jar = ctx.outputs.jar
+    jar = ctx.actions.declare_file("{}.jar".format(ctx.label.name))
 
     java_home = ctx.attr._jdk[java_common.JavaRuntimeInfo].java_home
     tmp_dir = "{}.tmp/".format(jar.path)
@@ -63,6 +63,8 @@ def _javadoc_impl(ctx):
         outputs = [jar],
     )
 
+    return DefaultInfo(files = depset([jar]))
+
 javadoc = rule(
     implementation = _javadoc_impl,
     attrs = {
@@ -82,8 +84,5 @@ javadoc = rule(
             default = Label("@bazel_tools//tools/jdk:current_host_java_runtime"),
             providers = [java_common.JavaRuntimeInfo],
         ),
-    },
-    outputs = {
-        "jar": "%{name}.jar",
     },
 )
