@@ -47,7 +47,7 @@ Main-Class: {}
 Start-Class: {}\
 """.format(
         ctx.attr._spring_boot_loader_class,
-        ctx.attr.main_class
+        ctx.attr.main_class,
     )
 
 def _paths(depset):
