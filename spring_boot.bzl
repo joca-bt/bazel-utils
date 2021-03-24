@@ -93,20 +93,25 @@ spring_boot_binary = rule(
         "libs": attr.label_list(
             allow_empty = False,
             mandatory = True,
+            providers = [JavaInfo],
         ),
         "main_class": attr.string(
             mandatory = True,
         ),
-        "runtime_deps": attr.label_list(),
+        "runtime_deps": attr.label_list(
+            providers = [JavaInfo],
+        ),
         "_jdk": attr.label(
             default = Label("@bazel_tools//tools/jdk:current_host_java_runtime"),
             providers = [java_common.JavaRuntimeInfo],
         ),
         "_spring_boot_jarmode_layertools": attr.label(
             default = Label("@maven//:org_springframework_boot_spring_boot_jarmode_layertools"),
+            providers = [JavaInfo],
         ),
         "_spring_boot_loader": attr.label(
             default = Label("@maven//:org_springframework_boot_spring_boot_loader"),
+            providers = [JavaInfo],
         ),
         "_spring_boot_loader_class": attr.string(
             default = "org.springframework.boot.loader.JarLauncher",
