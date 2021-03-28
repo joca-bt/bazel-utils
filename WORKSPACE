@@ -14,17 +14,14 @@
 
 workspace(name = "extra_bazel_tools")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-IO_BAZEL_STARDOC_TAG = "0.4.0"
-IO_BAZEL_STARDOC_SHA = "36b8d6c2260068b9ff82faea2f7add164bf3436eac9ba3ec14809f335346d66a"
-
-http_archive(
-    name = "io_bazel_stardoc",
-    sha256 = IO_BAZEL_STARDOC_SHA,
-    strip_prefix = "stardoc-{}".format(IO_BAZEL_STARDOC_TAG),
-    url = "https://github.com/bazelbuild/stardoc/archive/{}.zip".format(IO_BAZEL_STARDOC_TAG),
-)
+load("//:repositories.bzl", "io_bazel_stardoc")
+io_bazel_stardoc()
 
 load("@io_bazel_stardoc//:setup.bzl", "stardoc_repositories")
 stardoc_repositories()
+
+load("//:repositories.bzl", "rules_jvm_external")
+rules_jvm_external()
+
+load("//tests:maven.bzl", "install_maven_artifacts")
+install_maven_artifacts()
