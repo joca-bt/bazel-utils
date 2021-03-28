@@ -38,6 +38,7 @@ def _javadoc_impl(ctx):
         "--source-path {}".format(src_dir),
         "-subpackages {}".format(":".join(ctx.attr.packages)),
         "-d {}".format(javadoc_dir),
+        "-encoding UTF-8",
         "-notimestamp",
     ]
 
