@@ -3,17 +3,20 @@ Collection of Spring Boot rules:
   - spring_boot_binary, create an executable jar for a set of libraries (java_library).
 """
 
+load("@bazel_skylib//lib:new_sets.bzl", "sets")
+
 def _dependencies(ctx):
-    deps = []
+    deps = sets.make()
 
     for lib in ctx.attr.libs + ctx.attr.runtime_deps + [ctx.attr._spring_boot_jarmode_layertools]:
-        deps.extend(lib[JavaInfo].transitive_runtime_deps.to_list())
+        for dep in lib[JavaInfo].transitive_runtime_deps.to_list():
+            sets.insert(deps, dep)
 
     for lib in ctx.attr.libs:
         for src in lib[JavaInfo].runtime_output_jars:
-            deps.remove(src)
+            sets.remove(deps, src)
 
-    return depset(deps)
+    return depset(sets.to_list(deps))
 
 def _layers():
     return """\
