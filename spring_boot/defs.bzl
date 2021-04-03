@@ -8,11 +8,11 @@ load("@bazel_skylib//lib:new_sets.bzl", "sets")
 def _dependencies(ctx):
     deps = sets.make()
 
-    for lib in ctx.attr.libs + ctx.attr.runtime_deps + [ctx.attr._spring_boot_jarmode_layertools]:
+    for lib in ctx.attr.libs + ctx.attr.runtime_deps + [ctx.attr._spring_boot_jarmode_layertools, ctx.attr._spring_boot_loader]:
         for dep in lib[JavaInfo].transitive_runtime_deps.to_list():
             sets.insert(deps, dep)
 
-    for lib in ctx.attr.libs:
+    for lib in ctx.attr.libs + [ctx.attr._spring_boot_loader]:
         for src in lib[JavaInfo].runtime_output_jars:
             sets.remove(deps, src)
 
