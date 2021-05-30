@@ -28,8 +28,8 @@ def io_bazel_stardoc():
 
 # https://github.com/bazelbuild/rules_jvm_external/
 def rules_jvm_external():
-    tag = "4.0"
-    sha = "31701ad93dbfe544d597dbe62c9a1fdd76d81d8a9150c2bf1ecf928ecdf97169"
+    tag = "4.1"
+    sha = "f36441aa876c4f6427bfb2d1f2d723b48e9d930b62662bf723ddfb8fc80f0140"
 
     maybe(
         http_archive,
