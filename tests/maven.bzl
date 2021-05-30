@@ -1,8 +1,8 @@
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 load("@rules_jvm_external//:specs.bzl", "maven")
 
-_SPRING_BOOT = "2.4.4"
-_SPRING_FRAMEWORK = "5.3.5"
+_SPRING_BOOT = "2.5.0"
+_SPRING_FRAMEWORK = "5.3.7"
 
 def install_maven_artifacts():
     maven_install(
