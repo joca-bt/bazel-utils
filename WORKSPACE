@@ -1,4 +1,4 @@
-workspace(name = "extra_bazel_tools")
+workspace(name = "extra_rules_java")
 
 # Import Skylib rules.
 
