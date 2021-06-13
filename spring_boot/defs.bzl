@@ -1,8 +1,3 @@
-"""
-Collection of Spring Boot rules:
-  - spring_boot_binary, create an executable jar for a set of libraries (java_library).
-"""
-
 load("@bazel_skylib//lib:new_sets.bzl", "sets")
 
 def _dependencies(ctx):
@@ -77,6 +72,7 @@ def _spring_boot_binary_impl(ctx):
     return DefaultInfo(files = depset([jar]))
 
 spring_boot_binary = rule(
+    doc = "Create an executable jar for a set of libraries.",
     implementation = _spring_boot_binary_impl,
     attrs = {
         "libs": attr.label_list(

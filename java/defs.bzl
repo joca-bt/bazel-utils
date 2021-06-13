@@ -1,8 +1,3 @@
-"""
-Collection of Java rules:
-  - javadoc, generate the Javadoc for a set of libraries (java_library).
-"""
-
 def _paths(depset):
     return [element.path for element in depset.to_list()]
 
@@ -53,6 +48,7 @@ def _javadoc_impl(ctx):
     return DefaultInfo(files = depset([jar]))
 
 javadoc = rule(
+    doc = "Generate the Javadoc for a set of libraries.",
     implementation = _javadoc_impl,
     attrs = {
         "libs": attr.label_list(
