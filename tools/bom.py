@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
 import click
+from halo import Halo
 import re
 import requests
 import urllib.parse
 import xmltodict
-from halo import Halo
 
 
-_MAVEN_REPOSITORY = "https://repo.maven.apache.org/maven2/"
+MAVEN_REPOSITORY = "https://repo.maven.apache.org/maven2/"
 
 
 class Artifact:
@@ -31,13 +31,13 @@ class Artifact:
 
 
 def fetch_pom(artifact):
-    url = urllib.parse.urljoin(_MAVEN_REPOSITORY, artifact.url)
+    url = urllib.parse.urljoin(MAVEN_REPOSITORY, artifact.url)
 
     with requests.get(url) as r:
         r.raise_for_status()
 
-        with open(artifact.pom, "w") as f:
-            f.write(r.text)
+    with open(artifact.pom, "w") as f:
+        f.write(r.text)
 
 
 def generate_bzl(artifact, dependencies):
