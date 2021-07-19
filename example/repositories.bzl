@@ -13,15 +13,23 @@ def bazel_skylib():
         url = "https://github.com/bazelbuild/bazel-skylib/releases/download/{0}/bazel-skylib-{0}.tar.gz".format(tag),
     )
 
-# https://github.com/bazelbuild/stardoc/
-def io_bazel_stardoc():
-    tag = "0.4.0"
-    sha = "36b8d6c2260068b9ff82faea2f7add164bf3436eac9ba3ec14809f335346d66a"
+# https://github.com/joca-bt/extra_rules_java/
+def extra_rules_java():
+    maybe(
+        native.local_repository,
+        name = "extra_rules_java",
+        path = "../",
+    )
+
+# https://github.com/bazelbuild/rules_jvm_external/
+def rules_jvm_external():
+    tag = "4.1"
+    sha = "f36441aa876c4f6427bfb2d1f2d723b48e9d930b62662bf723ddfb8fc80f0140"
 
     maybe(
         http_archive,
-        name = "io_bazel_stardoc",
+        name = "rules_jvm_external",
         sha256 = sha,
-        strip_prefix = "stardoc-{}".format(tag),
-        url = "https://github.com/bazelbuild/stardoc/archive/{}.zip".format(tag),
+        strip_prefix = "rules_jvm_external-{}".format(tag),
+        url = "https://github.com/bazelbuild/rules_jvm_external/archive/{}.zip".format(tag),
     )

@@ -1,6 +1,6 @@
+load("@extra_rules_java//java:defs.bzl", "javadoc")
+load("@extra_rules_java//spring_boot:defs.bzl", "spring_boot_binary")
 load("@rules_java//java:defs.bzl", "java_binary", "java_library")
-load("//java:defs.bzl", "javadoc")
-load("//spring_boot:defs.bzl", "spring_boot_binary")
 
 java_library(
     name = "lib",
@@ -13,8 +13,8 @@ java_library(
 )
 
 java_binary(
-    name = "app",
-    main_class = "org.bazeltools.MainApplication",
+    name = "jbin",
+    main_class = "org.example.MainApplication",
     runtime_deps = [
         ":lib",
         "@maven//:org_springframework_boot_spring_boot_starter_web",
@@ -27,16 +27,16 @@ javadoc(
         ":lib",
     ],
     packages = [
-        "org.bazeltools",
+        "org.example",
     ],
 )
 
 spring_boot_binary(
-    name = "bin",
+    name = "sbin",
     libs = [
         ":lib",
     ],
-    main_class = "org.bazeltools.MainApplication",
+    main_class = "org.example.MainApplication",
     runtime_deps = [
         "@maven//:org_springframework_boot_spring_boot_starter_web",
     ],

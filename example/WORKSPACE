@@ -1,0 +1,22 @@
+workspace(name = "example")
+
+# Import Skylib rules.
+
+load("//:repositories.bzl", "bazel_skylib")
+bazel_skylib()
+
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+bazel_skylib_workspace()
+
+# Import Maven rules.
+
+load("//:repositories.bzl", "rules_jvm_external")
+rules_jvm_external()
+
+load("//:maven.bzl", "install_maven_artifacts")
+install_maven_artifacts()
+
+# Import additional Java rules.
+
+load("//:repositories.bzl", "extra_rules_java")
+extra_rules_java()

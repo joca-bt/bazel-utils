@@ -20,8 +20,10 @@ http_archive(
 )
 ```
 
-[spring_boot_binary](#spring_boot_binary) requires [bazel_skylib](https://github.com/bazelbuild/bazel-skylib/) and [rules_java_external](https://github.com/bazelbuild/rules_jvm_external/).
+Rule [spring_boot_binary](#spring_boot_binary) requires [bazel_skylib](https://github.com/bazelbuild/bazel-skylib/) and [rules_java_external](https://github.com/bazelbuild/rules_jvm_external/).
 Additionally, include `org.springframework.boot:spring-boot-jarmode-layertools` and `org.springframework.boot:spring-boot-loader` in your Maven artifacts.
+
+See [example/](example/) for an example.
 
 ## Rules
 
